@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block title %}Settings - CryBIT{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">System Settings</h2>
+    
+    <div class="card shadow-lg border-0 p-4">
+        <div class="card-body">
+            <h5 class="card-title text-center"><i class="fa-solid fa-gear text-primary"></i> Manage Detection Settings</h5>
+            <p class="text-muted text-center">Adjust scam detection configurations and system preferences.</p>
+            
+            <!-- Scam Detection Threshold -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Scam Risk Threshold</label>
+                <input type="range" id="riskThreshold" class="form-range" min="0" max="1" step="0.05" value="{{ config['scam_detection']['risk_threshold'] }}">
+                <p class="text-muted">Current Threshold: <span id="thresholdValue">{{ config['scam_detection']['risk_threshold'] }}</span></p>
+                <button class="btn btn-secondary w-100 mt-2" id="updateThreshold">Update Threshold</button>  <!-- ✅ New Button -->
+            </div>
+            
+            <!-- Scam Keywords Management -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Scam Keywords</label>
+                <textarea class="form-control" id="scamKeywords" rows="3">{{ ", ".join(config['scam_detection']['scam_keywords']) }}</textarea>
+                <button class="btn btn-secondary mt-2 w-100" id="updateKeywords">Update Keywords</button>
+            </div>
+            
+            <!-- Telegram Admin ID -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Telegram Admin ID</label>
+                <input type="text" class="form-control" id="adminId" value="{{ config['telegram_admin_id'] }}">
+                <button class="btn btn-secondary mt-2 w-100" id="updateAdmin">Update Admin ID</button>
+            </div>
+            
+            <!-- Reset Options -->
+            <div class="mb-4">
+                <h5 class="fw-bold">Reset Options</h5>
+                <button class="btn btn-danger w-100" id="resetScamMessages">Clear All Scam Messages</button>
+                <button class="btn btn-danger w-100 mt-2" id="resetMonitoredChannels">Reset Monitored Channels</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("riskThreshold").addEventListener("input", function() {
+        document.getElementById("thresholdValue").innerText = this.value;
+    });
+
+    document.getElementById("updateKeywords").addEventListener("click", function() {
+        let keywords = document.getElementById("scamKeywords").value.split(",").map(k => k.trim());
+        fetch("{{ url_for('settings') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ scam_keywords: keywords })
+        }).then(response => response.json()).then(data => {
+            alert("Keywords updated successfully!");
+        }).catch(error => console.error("Error updating keywords:", error));
+    });
+
+    document.getElementById("updateThreshold").addEventListener("click", function() {
+        let thresholdValue = document.getElementById("riskThreshold").value;
+        fetch("{{ url_for('settings') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ risk_threshold: thresholdValue })
+        }).then(response => response.json()).then(data => {
+            alert("Threshold updated successfully!");
+        }).catch(error => console.error("Error updating threshold:", error));
+    });
+
+    document.getElementById("updateAdmin").addEventListener("click", function() {
+        let adminId = document.getElementById("adminId").value.trim();
+        fetch("{{ url_for('settings') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ admin_id: adminId })
+        }).then(response => response.json()).then(data => {
+            alert("Admin ID updated successfully!");
+        }).catch(error => console.error("Error updating admin ID:", error));
+    });
+
+    document.getElementById("resetScamMessages").addEventListener("click", function() {
+        if (confirm("Are you sure you want to clear all scam messages?")) {
+            fetch("{{ url_for('clear_messages') }}", { method: "POST" })
+            .then(response => response.json())
+            .then(() => location.reload())
+            .catch(error => console.error("Error clearing scam messages:", error));
+        }
+    });
+
+    document.getElementById("resetMonitoredChannels").addEventListener("click", function() {
+        if (confirm("Are you sure you want to reset all monitored channels?")) {
+            fetch("{{ url_for('clear_channels') }}", { method: "POST" })
+            .then(response => response.json())
+            .then(() => location.reload())
+            .catch(error => console.error("Error resetting channels:", error));
+        }
+    });
+</script>
+{% endblock %}
