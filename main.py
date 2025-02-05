@@ -9,7 +9,7 @@ config = load_config()
 def index():
     """Render the dashboard page."""
     scam_messages = fetch_from_mongodb("scam_messages")
-    monitored_channels = fetch_from_mongodb("monitored_channels")  # ✅ Add this
+    monitored_channels = fetch_from_mongodb("monitored_channels")  
     return render_template("index.html", scam_messages=scam_messages, monitored_channels=monitored_channels)
 
 @app.route('/scan', methods=['GET', 'POST'])
@@ -41,20 +41,16 @@ from flask import Flask, render_template, request, jsonify
 def settings():
     """Render and update scam detection settings."""
     if request.method == 'POST':
-        try:
-            # Handle JSON or Form Data
+        try:           
             data = request.get_json() if request.is_json else request.form
-
-            # ✅ Update Scam Risk Threshold
+           
             if "risk_threshold" in data:
                 new_threshold = float(data["risk_threshold"])
                 config["scam_detection"]["risk_threshold"] = new_threshold
-
-            # ✅ Update Scam Keywords
+          
             if "scam_keywords" in data:
                 config["scam_detection"]["scam_keywords"] = data["scam_keywords"]
-
-            # ✅ Update Admin ID
+           
             if "admin_id" in data:
                 config["telegram_admin_id"] = data["admin_id"]
 
@@ -108,7 +104,7 @@ def remove_channel():
     channel_id = data.get("channel_id")
 
     if channel_id:
-        remove_monitored_channel(channel_id)  # Use the function from database.py
+        remove_monitored_channel(channel_id)  
         return jsonify({"message": "Channel removed successfully"}), 200
 
     return jsonify({"error": "Channel ID is required"}), 400
