@@ -45,3 +45,6 @@ pip-delete-this-directory.txt
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# Ignore user session file
+user_session.session
