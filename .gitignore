@@ -48,3 +48,4 @@ Thumbs.db
 
 # Ignore user session file
 user_session.session
+user_session.session-journal
