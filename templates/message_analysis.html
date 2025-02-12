@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %}Message Analysis - CryBIT{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Advanced Message Analysis</h2>
+    
+    <div class="card shadow-lg border-0 p-3">
+        <div class="card-body">
+            <h5 class="card-title"><i class="fa-solid fa-chart-line text-primary"></i> Analyze Flagged Messages</h5>
+            <p class="text-muted">Use advanced filters to search and analyze flagged scam messages.</p>
+            
+            <!-- Filter Options -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <input type="text" id="searchBox" class="form-control" placeholder="Search messages...">
+                </div>
+                <div class="col-md-4">
+                    <select id="riskFilter" class="form-select">
+                        <option value="all">All Risk Levels</option>
+                        <option value="high">High Risk ( > 0.7 )</option>
+                        <option value="medium">Medium Risk ( 0.4 - 0.7 )</option>
+                        <option value="low">Low Risk ( < 0.4 )</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select id="flagFilter" class="form-select">
+                        <option value="all">All Flags</option>
+                        <option value="Keyword Match">Keyword Match</option>
+                        <option value="ML Model Prediction">ML Model Prediction</option>
+                        <option value="Phishing URL">Phishing URL</option>
+                        <option value="Wallet Blacklist">Wallet Blacklist</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Messages Table -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Channel</th>
+                            <th>Message</th>
+                            <th>Risk Score</th>
+                            <th>Flags</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messageTableBody">
+                        {% for msg in scam_messages %}
+                        <tr class="message-entry" data-risk="{{ msg.risk_score }}" data-flags="{{ ','.join(msg.flags) }}">
+                            <td>{{ msg.channel }}</td>
+                            <td class="text-start">{{ msg.message[:100] }}...</td>
+                            <td>
+                                <span class="badge {% if msg.risk_score > 0.7 %}bg-danger{% elif msg.risk_score > 0.4 %}bg-warning{% else %}bg-success{% endif %}">
+                                    {{ msg.risk_score }}
+                                </span>
+                            </td>
+                            <td>{{ ", ".join(msg.flags) }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">No scam messages detected yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("searchBox").addEventListener("input", function() {
+        let filter = this.value.toLowerCase();
+        document.querySelectorAll(".message-entry").forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
+        });
+    });
+    
+    document.getElementById("riskFilter").addEventListener("change", function() {
+        let value = this.value;
+        document.querySelectorAll(".message-entry").forEach(row => {
+            let risk = parseFloat(row.dataset.risk);
+            let show = 
+                (value === "all") ||
+                (value === "high" && risk > 0.7) ||
+                (value === "medium" && risk > 0.4 && risk <= 0.7) ||
+                (value === "low" && risk <= 0.4);
+            row.style.display = show ? "" : "none";
+        });
+    });
+    
+    document.getElementById("flagFilter").addEventListener("change", function() {
+        let value = this.value;
+        document.querySelectorAll(".message-entry").forEach(row => {
+            let flags = row.dataset.flags.split(",");
+            let show = (value === "all") || flags.includes(value);
+            row.style.display = show ? "" : "none";
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+# Byte-compiled / cached
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+*.env
+*.venv
+
+# Logs
+logs/
+*.log
+
+# Database
+*.sqlite3
+*.db
+*.pdb
+*.mdb
+
+# MongoDB Dump Files
+dump/
+
+# Ignore environment variables
+.env
+*.pem
+*.key
+*.crt
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# Python dependencies
+*.egg-info/
+*.dist-info/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook Checkpoints (if used)
+.ipynb_checkpoints/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore user session file
+user_session.session
+user_session.session-journal
