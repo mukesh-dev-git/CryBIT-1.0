@@ -39,7 +39,7 @@ def analyze_message(message_text):
     
     # Keyword-based detection
     if any(keyword in message_text.lower() for keyword in scam_keywords):
-        risk_score += 0.5
+        risk_score += 0.3
         flags.append("Keyword Match")
     
     # ML Model Prediction
@@ -47,7 +47,7 @@ def analyze_message(message_text):
         message_vector = vectorizer.transform([message_text])  # Use pre-trained vectorizer
         prediction = model.predict_proba(message_vector)[0][1]
         risk_score += prediction
-        if prediction > 0.3:
+        if prediction > 0.5:
             flags.append("ML Model Prediction")
     
     # Sentence Transformer Embeddings for Semantic Analysis

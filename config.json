@@ -11,7 +11,7 @@
       "admin_id": 1545494302
   },
   "scam_detection": {
-      "risk_threshold": 0.3,
+      "risk_threshold": 0.5,
       "scam_keywords": ["giveaway", "free crypto", "investment", "double your money"],
       "enable_url_check": true,
       "enable_wallet_check": true,
