@@ -49,4 +49,7 @@ Thumbs.db
 # Ignore user session file
 user_session.session
 user_session.session-journal
+<<<<<<< HEAD
 config.json
+=======
+>>>>>>> 04901086b300cd6cc3979d06d061d9a09a927eb7

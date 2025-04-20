@@ -1,0 +1,29 @@
+{
+  "mongodb": {
+      "host": "localhost",
+      "port": 27017,
+      "database": "crybit_db"
+  },
+  "telegram": {
+      "api_id": 23745404,
+      "api_hash": "d48ff993112f1ca080fe5eeec8190d81",
+      "bot_token": "7619793800:AAGNDnQ9uN_j-q4fjIiiK2lQILkUPZ5tVDo",
+      "admin_id": 1545494302
+  },
+  "scam_detection": {
+      "risk_threshold": 0.3,
+      "scam_keywords": ["giveaway", "free crypto", "investment", "double your money"],
+      "enable_url_check": true,
+      "enable_wallet_check": true,
+      "enable_ocr": true
+  },
+  "google_safe_browsing": {
+      "api_key": "AIzaSyDQwo-3fe3zSADZXslXp2buDamn2Tz3ERE"
+  },
+  "scam_wallet_api": {
+      "api_key": "YOUR_SCAM_WALLET_API_KEY"
+  },
+  "ml_model": {
+    "model_path": "ml_model.pkl"
+  }
+}
