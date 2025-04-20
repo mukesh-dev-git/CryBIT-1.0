@@ -2,6 +2,8 @@
 
 CryBIT is an advanced **AI-powered scam detection system** that monitors Telegram channels in **real-time** to detect and flag **cryptocurrency scams**, **phishing attempts**, **blacklisted wallets**, and **fraudulent messages** using **ML, NLP, and rule-based heuristics**.
 
+<img src="logo.png" alt="Crybit logo" width="300"/>
+
 
 ## 🔧 Tech Stack
 
